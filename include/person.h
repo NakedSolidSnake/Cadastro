@@ -11,4 +11,8 @@ typedef struct
     int age;
 } person_t;
 
+person_t person_create(void);
+char *person_input_name(void);
+void person_parser(char *buffer, person_t *person);
+
 #endif /* PERSON_H */
