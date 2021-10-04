@@ -23,7 +23,7 @@ void menu_print(void)
     printf("%s",   MENU_TEXT_CURSOR);    
 }
 
-bool menu_option_select(int option)
+bool menu_option_select(int option, repository_base *repository)
 {
     bool status = true;
 
@@ -33,7 +33,7 @@ bool menu_option_select(int option)
     {
         if(option == options[i].option)
         {
-            options[i].command();
+            options[i].command(repository);
             break;
         }
     }

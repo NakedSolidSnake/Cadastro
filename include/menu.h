@@ -2,6 +2,7 @@
 #define MENU_H
 
 #include <stdbool.h>
+#include <repository.h>
 
 #define MENU_TEXT_ADD_PERSON     "1. Add a new person"
 #define MENU_TEXT_REMOVE_PERSON  "2. Remove a person"
@@ -21,7 +22,7 @@ typedef enum
     menu_option_quit
 } menu_option_t;
 
-typedef void (*menu_option_base)(void);
+typedef void (*menu_option_base)(repository_base *repository);
 
 typedef struct 
 {
@@ -29,6 +30,6 @@ typedef struct
     menu_option_base command;
 } menu_options_struct_t;
 
-bool menu_option_select(int option);
+bool menu_option_select(int option, repository_base *repository);
 void menu_print(void);
 #endif /* MENU_H */

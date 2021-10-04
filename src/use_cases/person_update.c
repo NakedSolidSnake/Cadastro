@@ -1,36 +1,23 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <database.h>
 #include <person.h>
+#include <use_cases.h>
 
-void use_case_person_update(void)
+void use_case_person_update(repository_base *repository)
 {
     int id = -1;
-    int items = db_count_items();
 
-    person_t *persons = (person_t *)malloc(sizeof(person_t) * items);
-    if(persons == NULL)
-        return;
+    int items = 0;
+    person_t *person_list;
 
-    FILE *f = fopen(DB_DATABASE_FILE, "r");
-
-    for(int i = 0; i < items; i++)
-    {
-        char buffer[240] = "";
-        fgets(buffer, 240, f);
-
-        person_parser(buffer, &persons[i]);
-
-    }
-
-    fclose(f);
+    repository->recover_list(repository->object, &person_list, &items);
 
     char *name_update = person_input_name();
 
     for (int i = 0; i < items; i++)
     {
-        if(strncmp(name_update, persons[i].name, PERSON_NAME_LEN) == 0)
+        if(strncmp(name_update, person_list[i].name, PERSON_NAME_LEN) == 0)
         {
             id = i;
             break;
@@ -39,20 +26,12 @@ void use_case_person_update(void)
     
     if(id != -1)
     {
-        memset(&persons[id], 0, sizeof(person_t));
-        persons[id] = person_create();
+        memset(&person_list[id], 0, sizeof(person_t));
+        person_list[id] = person_create();
     }
 
-    f = fopen(DB_DATABASE_FILE, "w");
-    for(int i = 0; i < items; i++)
-    {
-        if(persons[i].name[0] == '\0' || persons[i].address[0] == '\0')
-            continue;
-
-        fprintf(f, DB_DATABASE_FORMAT, persons[i].name, persons[i].address, persons[i].age);
-    }
+    repository->store_list(repository->object, person_list, items);
 
     free(name_update);
-    free(persons);
-    fclose(f);    
+    free(person_list);
 }
