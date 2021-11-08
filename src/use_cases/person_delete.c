@@ -21,7 +21,7 @@ void use_case_person_delete(repository_base *repository)
             store.id = i;
             store.action = repo_delete;
             store.amount = items;
-            store.person = &person_list[i];
+            store.person = person_list;
             repository->store(repository->object, &store);
             break;
         }

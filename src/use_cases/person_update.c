@@ -26,7 +26,7 @@ void use_case_person_update(repository_base *repository)
     
     if(id != -1)
     {
-        store.person = &person_list[id];
+        store.person = person_list;
         store.id = id;
         store.action = repo_update;
         store.amount = items;
