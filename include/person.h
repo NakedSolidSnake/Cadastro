@@ -1,11 +1,12 @@
-#ifndef PERSON_H
-#define PERSON_H
+#ifndef PERSON_H_
+#define PERSON_H_
 
 #define PERSON_NAME_LEN         120
 #define PERSON_ADDRESS_LEN      120
 
 typedef struct 
 {
+    int id;
     char name[PERSON_NAME_LEN];
     char address[PERSON_ADDRESS_LEN];
     int age;
@@ -14,4 +15,4 @@ typedef struct
 person_t person_create(void);
 char *person_input_name(void);
 
-#endif /* PERSON_H */
+#endif /* PERSON_H_ */

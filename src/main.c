@@ -4,11 +4,15 @@
 #include <menu.h>
 #include <repository_factory.h>
 
+#define REPOSITORY_TYPE "sqlite"
+// #define REPOSITORY_TYPE "file"
+
 int main(void)
 {
     int option;
 
-    repository_base *repository = repository_create("file");
+    // repository_base *repository = repository_create("file");
+    repository_base *repository = repository_create(REPOSITORY_TYPE);
     if(repository == NULL)
         return EXIT_FAILURE;
 
@@ -20,7 +24,8 @@ int main(void)
         menu_option_select(option, repository);
     }
 
-    free(repository);
+    // free(repository);
+    repository_destroy(REPOSITORY_TYPE, repository);
     
     return EXIT_SUCCESS;
 }

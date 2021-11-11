@@ -17,7 +17,7 @@ void use_case_person_delete(repository_base *repository)
     {
         if(strncmp(name_delete, person_list[i].name, PERSON_NAME_LEN) == 0)
         {
-            memset(&person_list[i], 0, sizeof(person_t));
+            // memset(&person_list[i], 0, sizeof(person_t));
             store.id = i;
             store.action = repo_delete;
             store.amount = items;

@@ -43,6 +43,7 @@ static bool file_store(void *object, store_action_t *store)
         break;
 
     case repo_delete:
+        memset(&store->person[store->id], 0, sizeof(person_t));
     case repo_update:
         state = file_store_list(object, store->person, store->amount);
         break;   
@@ -107,6 +108,19 @@ repository_base *file_create_database(void)
     }
 
     return repository;
+}
+
+bool file_destroy_database(repository_base *repository)
+{
+    bool status = false;
+
+    if(repository != NULL)
+    {
+        free(repository);
+        status = true;
+    }
+
+    return status;
 }
 
 bool file_is_database_exists(void)

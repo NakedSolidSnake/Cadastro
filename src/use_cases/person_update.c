@@ -26,12 +26,17 @@ void use_case_person_update(repository_base *repository)
     
     if(id != -1)
     {
+        person_t person_tmp;
         store.person = person_list;
         store.id = id;
         store.action = repo_update;
         store.amount = items;
-        memset(&person_list[id], 0, sizeof(person_t));
-        person_list[id] = person_create();
+        // memset(&person_list[id], 0, sizeof(person_t));
+        person_tmp = person_create();
+        strncpy(person_list[id].name, person_tmp.name, PERSON_NAME_LEN);
+        strncpy(person_list[id].address, person_tmp.address, PERSON_ADDRESS_LEN);
+        person_list[id].age = person_tmp.age;
+
         repository->store(repository->object, &store);
     }
 
