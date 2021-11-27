@@ -17,7 +17,7 @@ target_sources(cadastro
     PUBLIC 
     ${CMAKE_CURRENT_LIST_DIR}/src/main.c 
     ${CMAKE_CURRENT_LIST_DIR}/src/person.c 
-    ${CMAKE_CURRENT_LIST_DIR}/src/menu.c 
+    # ${CMAKE_CURRENT_LIST_DIR}/src/menu.c 
     ${CMAKE_CURRENT_LIST_DIR}/src/use_cases/person_add.c 
     ${CMAKE_CURRENT_LIST_DIR}/src/use_cases/person_delete.c 
     ${CMAKE_CURRENT_LIST_DIR}/src/use_cases/person_find.c 
@@ -28,6 +28,10 @@ target_sources(cadastro
     ${CMAKE_CURRENT_LIST_DIR}/src/repository/sqlite/sqlite_database.c
     ${CMAKE_CURRENT_LIST_DIR}/src/repository/repository.c 
     ${CMAKE_CURRENT_LIST_DIR}/src/repository/repository_factory.c
+    ${CMAKE_CURRENT_LIST_DIR}/src/view/cli/cli.c 
+    ${CMAKE_CURRENT_LIST_DIR}/src/view/view_factory.c 
+    ${CMAKE_CURRENT_LIST_DIR}/src/view/cli/menu/menu.c 
+    ${CMAKE_CURRENT_LIST_DIR}/src/application.c 
     )
 
 target_include_directories(cadastro 
@@ -35,4 +39,5 @@ target_include_directories(cadastro
     ${CMAKE_CURRENT_LIST_DIR}/include 
     ${CMAKE_CURRENT_LIST_DIR}/src/repository/file
     ${CMAKE_CURRENT_LIST_DIR}/src/repository/sqlite
+    ${CMAKE_CURRENT_LIST_DIR}/src/view/cli
 )

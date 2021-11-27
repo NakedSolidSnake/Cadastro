@@ -4,7 +4,7 @@
 
 void use_case_person_list(repository_base *repository)
 {
-    person_t *person_list;
+    person_t *person_list = NULL;
     int items;
 
     repository-> recover_list(repository->object, &person_list, &items);

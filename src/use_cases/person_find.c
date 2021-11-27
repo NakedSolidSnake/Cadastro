@@ -10,7 +10,7 @@ void use_case_person_find(repository_base *repository)
     int id = -1;
     char *name_find = person_input_name();    
 
-    person_t *person_list;
+    person_t *person_list = NULL;
     int items;
 
     repository->recover_list(repository->object, &person_list, &items);
