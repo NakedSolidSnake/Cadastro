@@ -16,28 +16,26 @@ target_link_libraries(cadastro sqlite3)
 target_sources(cadastro 
     PUBLIC 
     ${CMAKE_CURRENT_LIST_DIR}/src/main.c 
-    ${CMAKE_CURRENT_LIST_DIR}/src/person.c 
-    # ${CMAKE_CURRENT_LIST_DIR}/src/menu.c 
-    ${CMAKE_CURRENT_LIST_DIR}/src/use_cases/person_add.c 
-    ${CMAKE_CURRENT_LIST_DIR}/src/use_cases/person_delete.c 
-    ${CMAKE_CURRENT_LIST_DIR}/src/use_cases/person_find.c 
-    ${CMAKE_CURRENT_LIST_DIR}/src/use_cases/person_list.c 
-    ${CMAKE_CURRENT_LIST_DIR}/src/use_cases/person_quit.c 
-    ${CMAKE_CURRENT_LIST_DIR}/src/use_cases/person_update.c
-    ${CMAKE_CURRENT_LIST_DIR}/src/repository/file/file_database.c 
-    ${CMAKE_CURRENT_LIST_DIR}/src/repository/sqlite/sqlite_database.c
-    ${CMAKE_CURRENT_LIST_DIR}/src/repository/repository.c 
-    ${CMAKE_CURRENT_LIST_DIR}/src/repository/repository_factory.c
-    ${CMAKE_CURRENT_LIST_DIR}/src/view/cli/cli.c 
-    ${CMAKE_CURRENT_LIST_DIR}/src/view/view_factory.c 
-    ${CMAKE_CURRENT_LIST_DIR}/src/view/cli/menu/menu.c 
-    ${CMAKE_CURRENT_LIST_DIR}/src/application.c 
+    ${CMAKE_CURRENT_LIST_DIR}/src/domain/model/person.c    
+    ${CMAKE_CURRENT_LIST_DIR}/src/domain/services/person_service.c
+    ${CMAKE_CURRENT_LIST_DIR}/src/adapters/repositories/person_repository_factory.c
+    ${CMAKE_CURRENT_LIST_DIR}/src/adapters/repositories/file/person_repository_file.c
+    ${CMAKE_CURRENT_LIST_DIR}/src/adapters/repositories/sqlite/person_repository_sqlite.c
+    ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/person_controller_factory.c
+    ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/cli_controller/person_controller_cli.c
+    ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/cli_controller/cli/cli.c
+    
     )
 
 target_include_directories(cadastro 
     PUBLIC 
-    ${CMAKE_CURRENT_LIST_DIR}/include 
-    ${CMAKE_CURRENT_LIST_DIR}/src/repository/file
-    ${CMAKE_CURRENT_LIST_DIR}/src/repository/sqlite
-    ${CMAKE_CURRENT_LIST_DIR}/src/view/cli
+    ${CMAKE_CURRENT_LIST_DIR}/src/domain/model
+    ${CMAKE_CURRENT_LIST_DIR}/src/domain/ports
+    ${CMAKE_CURRENT_LIST_DIR}/src/domain/services
+    ${CMAKE_CURRENT_LIST_DIR}/src/adapters/repositories
+    ${CMAKE_CURRENT_LIST_DIR}/src/adapters/repositories/file 
+    ${CMAKE_CURRENT_LIST_DIR}/src/adapters/repositories/sqlite
+    ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers
+    ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/cli_controller
+    ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/cli_controller/cli
 )

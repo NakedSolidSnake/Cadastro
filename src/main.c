@@ -1,56 +1,21 @@
-#include <stdio.h>
+#include <person_service.h>
+#include <person_repository_factory.h>
+#include <person_controller_factory.h>
 #include <stdlib.h>
-#include <stdbool.h>
-#include <menu.h>
-#include <repository_factory.h>
-#include <view_factory.h>
-#include <application.h>
-
-#define REPOSITORY_TYPE "sqlite"
-#define VIEW_TYPE       "cli"
-// #define REPOSITORY_TYPE "file"
 
 int main(void)
 {
-    // int option;
-    repository_base *repository = NULL;
-    view_base *view = NULL;
-    application_t app;
-    bool ret;
+    person_repository_base_t repository = person_repository_create (person_repository_type_sqlite);
 
-    do 
-    {
-        repository = repository_create(REPOSITORY_TYPE);
-        if(repository == NULL)
-            break;
+    person_service_t service;
+    person_service_init (&service);
+    person_service_open (&service, (person_repository_base_t *)&repository);
 
-        view = view_create(VIEW_TYPE);
-        if (view == NULL)
-            break;
-        
-        ret = application_init(&app, view, repository);
-        if (ret == false)
-            break;
+    person_controller_base_t controller = person_controller_factory_create (person_controller_type_cli, &service);
+    controller.run (controller.object);
 
-        application_run(&app);
-
-    } while (false);
-
-    // repository_base *repository = repository_create("file");
-    // repository_base *
-    
-
-    // while(true)
-    // {
-    //     menu_print();
-    //     scanf("%d", &option);
-    //     getchar();
-    //     menu_option_select(option, repository);
-    // }
-
-    // free(repository);
-    repository_destroy(REPOSITORY_TYPE, repository);
-    view_destroy(VIEW_TYPE, view);
+    controller.close (controller.object);
+    person_service_close (&service);
     
     return EXIT_SUCCESS;
 }
