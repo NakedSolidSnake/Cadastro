@@ -10,6 +10,6 @@ typedef enum
     // person_controller_type_webserver
 } person_controller_type_t;
 
-person_controller_base_t person_controller_factory_create (person_controller_type_t type, person_service_t *service);
+person_controller_base_t person_controller_factory_create (person_controller_type_t type, person_controller_args_t *args);
 
 #endif /* PERSON_CONTROLLER_FACTORY_H_ */

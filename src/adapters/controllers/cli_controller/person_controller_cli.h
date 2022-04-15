@@ -13,10 +13,10 @@ typedef struct
 } person_controller_cli_t;
 
 bool person_controller_cli_init (void *object);
-bool person_controller_cli_open (void *object, person_service_t *service);
+bool person_controller_cli_open (void *object, person_controller_args_t *args);
 bool person_controller_cli_run (void *object);
 bool person_controller_cli_close (void *object);
 
-person_controller_base_t person_controller_cli_create (person_service_t *service);
+person_controller_base_t person_controller_cli_create (person_controller_args_t *args);
 
 #endif /* PERSON_CONTROLLER_CLI_H_ */

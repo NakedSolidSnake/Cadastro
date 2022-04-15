@@ -3,7 +3,7 @@
 #include <person_controller_factory.h>
 #include <stdlib.h>
 
-int main(void)
+int main(int argc, char *argv[])
 {
     person_repository_base_t repository = person_repository_create (person_repository_type_sqlite);
 
@@ -11,7 +11,14 @@ int main(void)
     person_service_init (&service);
     person_service_open (&service, (person_repository_base_t *)&repository);
 
-    person_controller_base_t controller = person_controller_factory_create (person_controller_type_cli, &service);
+    person_controller_args_t args = 
+    {
+        .argc = argc,
+        .argv = argv,
+        .service = &service
+    };
+
+    person_controller_base_t controller = person_controller_factory_create (person_controller_type_cli, &args);
     controller.run (controller.object);
 
     controller.close (controller.object);
