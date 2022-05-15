@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
         .service = &service
     };
 
-    person_controller_base_t controller = person_controller_factory_create (person_controller_type_cli, &args);
+    person_controller_base_t controller = person_controller_factory_create (person_controller_type_gtk, &args);
     controller.run (controller.object);
 
     controller.close (controller.object);
