@@ -1,5 +1,5 @@
-#ifndef PERSON_CONTROLLER_GTK_H
-#define PERSON_CONTROLLER_GTK_H
+#ifndef PERSON_CONTROLLER_GTK_H_
+#define PERSON_CONTROLLER_GTK_H_
 
 #include <person_controller_base.h>
 #include <person_service.h>
@@ -19,4 +19,4 @@ bool person_controller_gtk_close (void *object);
 
 person_controller_base_t person_controller_gtk_create (person_controller_args_t *args);
 
-#endif /* PERSON_CONTROLLER_GTK_H */
+#endif /* PERSON_CONTROLLER_GTK_H_ */
