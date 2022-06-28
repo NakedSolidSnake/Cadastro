@@ -33,7 +33,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <signal name="clicked" handler="on_bt_confirm_clicked" swapped="no"/>
+                <signal name="clicked" handler="on_bt_edit_confirm_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -47,7 +47,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <signal name="clicked" handler="on_bt_cancel_clicked" swapped="no"/>
+                <signal name="clicked" handler="on_bt_edit_cancel_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">True</property>
