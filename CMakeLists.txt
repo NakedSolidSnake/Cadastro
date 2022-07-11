@@ -29,7 +29,6 @@ if (PKG_CONFIG_FOUND)
             ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/cli_controller/person_controller_cli.c
             ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/cli_controller/cli/cli.c
             ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/gtk_controller/person_controller_gtk.c
-            ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/gtk_controller/view/gtk_view.c
             ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/gtk_controller/view/mainwindow/main_window.c
             ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/gtk_controller/view/insertdialog/insert_dialog.c
             ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/gtk_controller/view/editdialog/edit_dialog.c

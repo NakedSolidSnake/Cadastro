@@ -2,14 +2,16 @@
 #define PERSON_CONTROLLER_GTK_H_
 
 #include <person_controller_base.h>
+#include <person_controller_events_base.h>
 #include <person_service.h>
-#include <gtk_view.h>
+#include <view_base.h>
 
 typedef struct 
 {
     person_controller_base_t base;
+    person_controller_events_base_t events;
     person_service_t *service;
-    gtk_view_t view;
+    view_base_t *view;
 } person_controller_gtk_t;
 
 bool person_controller_gtk_init (void *object);

@@ -5,7 +5,7 @@
 
 int main(int argc, char *argv[])
 {
-    person_repository_base_t repository = person_repository_create (person_repository_type_sqlite);
+    person_repository_base_t repository = person_repository_create (person_repository_type_file);
 
     person_service_t service;
     person_service_init (&service);

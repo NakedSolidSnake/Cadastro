@@ -24,7 +24,7 @@ bool insert_dialog_open (insert_dialog_t *dialog, insert_dialog_args_t *args)
 
     if (dialog != NULL && args != NULL)
     {
-
+        dialog->con = args->con;
         status = insert_dialog_graphics_init (dialog);
     }
 
@@ -50,7 +50,7 @@ bool insert_dialog_close (insert_dialog_t *dialog)
 
     if (dialog != NULL)
     {
-        g_slice_free (insert_dialog_t, dialog->widgets);
+        g_slice_free (insert_dialog_widgets_t, dialog->widgets);
         memset (dialog, 0, sizeof (insert_dialog_t));
         status = true;
     }
@@ -89,14 +89,18 @@ void on_insert_window_destroy (void)
 
 void on_bt_insert_confirm_clicked (GtkButton *bt_insert, void *data)
 {
-    insert_dialog_t *dialog = (insert_dialog_t *)data;
+    insert_dialog_t *d = (insert_dialog_t *)data;
 
-    printf ("confirm.\n");
+    char *name = (char *)gtk_entry_get_text (d->widgets->txt_name);
+    char *address = (char *)gtk_entry_get_text (d->widgets->txt_address);
+    char *age = (char *)gtk_entry_get_text (d->widgets->txt_age);
+
+    d->con->on_add (d->con->object, name, address, age);
+    gtk_widget_destroy (GTK_WIDGET (d->widgets->dialog));
 }
 
 void on_bt_insert_cancel_clicked (GtkButton *bt_insert, void *data)
 {
     insert_dialog_t *dialog = (insert_dialog_t *)data;
-    printf ("cancel.\n");
     gtk_widget_destroy (GTK_WIDGET (dialog->widgets->dialog));    
 }

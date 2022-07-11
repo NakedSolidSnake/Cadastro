@@ -24,7 +24,11 @@ bool edit_dialog_open (edit_dialog_t *dialog, edit_dialog_args_t *args)
 
     if (dialog != NULL && args != NULL)
     {
-
+        dialog->con = args->con;
+        dialog->id = args->id;
+        dialog->name = args->name;
+        dialog->address = args->address;
+        dialog->age = args->age;
         status = edit_dialog_graphics_init (dialog);
     }
 
@@ -37,6 +41,11 @@ bool edit_dialog_run (edit_dialog_t *dialog)
 
     if (dialog != NULL)
     {
+        char buff[5] = {0};
+        gtk_entry_set_text (GTK_ENTRY (dialog->widgets->txt_name), dialog->name);
+        gtk_entry_set_text (GTK_ENTRY (dialog->widgets->txt_address), dialog->address);
+        snprintf (buff, 5, "%d", dialog->age);
+        gtk_entry_set_text (GTK_ENTRY (dialog->widgets->txt_age), buff);
         gtk_dialog_run (GTK_DIALOG (dialog->widgets->dialog));
         status = true;
     }
@@ -50,7 +59,7 @@ bool edit_dialog_close (edit_dialog_t *dialog)
 
     if (dialog != NULL)
     {
-        g_slice_free (edit_dialog_t, dialog->widgets);
+        g_slice_free (edit_dialog_widgets_t, dialog->widgets);
         memset (dialog, 0, sizeof (edit_dialog_t));
         status = true;
     }
@@ -89,14 +98,28 @@ void on_edit_window_destroy (void)
 
 void on_bt_edit_confirm_clicked (GtkButton *bt_edit, void *data)
 {
-    edit_dialog_t *dialog = (edit_dialog_t *)data;
+    edit_dialog_t *d = (edit_dialog_t *)data;
+    char *name = (char *) gtk_entry_get_text (GTK_ENTRY (d->widgets->txt_name));
+    char *address = (char *) gtk_entry_get_text (GTK_ENTRY (d->widgets->txt_address));
+    char *age = (char *) gtk_entry_get_text (GTK_ENTRY (d->widgets->txt_age));
 
-    printf ("confirm.\n");
+    GtkWidget *dialog = gtk_message_dialog_new (GTK_WINDOW (d->widgets->dialog),
+                                                GTK_DIALOG_MODAL,
+                                                GTK_MESSAGE_QUESTION,
+                                                GTK_BUTTONS_OK_CANCEL,
+                                                "%s", 
+                                                "This content is about to be modified. Are you sure?");
+
+    int answer = gtk_dialog_run (GTK_DIALOG (dialog));
+    if (answer == GTK_RESPONSE_OK)
+        d->con->on_update (d->con->object, d->id, name, address, age);
+
+    gtk_widget_destroy (GTK_WIDGET (dialog));
+    gtk_widget_destroy (GTK_WIDGET (d->widgets->dialog));
 }
 
 void on_bt_edit_cancel_clicked (GtkButton *bt_edit, void *data)
 {
     edit_dialog_t *dialog = (edit_dialog_t *)data;
-    printf ("cancel.\n");
-    gtk_widget_destroy (GTK_WIDGET (dialog->widgets->dialog));    
+    gtk_widget_destroy (GTK_WIDGET (dialog->widgets->dialog));
 }

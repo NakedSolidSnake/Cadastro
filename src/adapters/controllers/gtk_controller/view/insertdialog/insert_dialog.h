@@ -2,6 +2,7 @@
 #define INSERT_DIALOG_H_
 
 #include <stdbool.h>
+#include <person_controller_events_base.h>
 
 typedef struct 
 {
@@ -17,6 +18,7 @@ typedef struct
 {
     void *parent;
     insert_dialog_widgets_t *widgets;
+    person_controller_events_base_t *con;
 } insert_dialog_t;
 
 
@@ -25,6 +27,7 @@ typedef struct
     void *parent;
     int argc;
     char **argv;
+    person_controller_events_base_t *con;
 } insert_dialog_args_t;
 
 bool insert_dialog_init (insert_dialog_t *dialog);

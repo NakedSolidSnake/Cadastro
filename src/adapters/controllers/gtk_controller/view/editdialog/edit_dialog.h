@@ -2,6 +2,7 @@
 #define EDIT_DIALOG_H_
 
 #include <stdbool.h>
+#include <person_controller_events_base.h>
 
 typedef struct 
 {
@@ -17,6 +18,11 @@ typedef struct
 {
     void *parent;
     edit_dialog_widgets_t *widgets;
+    person_controller_events_base_t *con;
+    int id;
+    char *name;
+    char *address;
+    int age;
 } edit_dialog_t;
 
 
@@ -25,6 +31,11 @@ typedef struct
     void *parent;
     int argc;
     char **argv;
+    person_controller_events_base_t *con;
+    int id;
+    char *name;
+    char *address;
+    int age;
 } edit_dialog_args_t;
 
 bool edit_dialog_init (edit_dialog_t *dialog);
