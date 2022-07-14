@@ -6,3 +6,7 @@ services:
         build: .
         volumes:
             - .:/cadastro
+            - /tmp/.X11-unix:/tmp/./X11-unix
+        environment:
+            - DISPLAY=${DISPLAY}
+        network_mode: host
