@@ -35,11 +35,11 @@ static int handler (void* user, const char* section, const char* name, const cha
 {
     configuration_t* config = (configuration_t*)user;
    
-    if (MATCH("repository", "type"))
+    if (MATCH(CONFIGURATION_SECTOR_REPOSITORY, CONFIGURATION_SECTOR_VALUE_TYPE))
     {
         strncpy (config->repository_type, value, CONFIGURATION_REPOSITORY_MAX_LEN);
     }
-    else if (MATCH("controller", "type"))
+    else if (MATCH(CONFIGURATION_SECTOR_CONTROLLER, CONFIGURATION_SECTOR_VALUE_TYPE))
     {
         strncpy (config->controller_type, value, CONFIGURATION_CONTROLLER_MAX_LEN);
     } 

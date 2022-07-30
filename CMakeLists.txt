@@ -35,6 +35,8 @@ if (PKG_CONFIG_FOUND)
             ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/gtk_controller/view/insertdialog/insert_dialog.c
             ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/gtk_controller/view/editdialog/edit_dialog.c
             ${CMAKE_CURRENT_LIST_DIR}/src/config/configuration.c
+            ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/webserver_controller/person_controller_webserver.c
+            ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/webserver_controller/webserver/webserver.c
             
             )
 
@@ -54,10 +56,12 @@ if (PKG_CONFIG_FOUND)
             ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/gtk_controller/view/mainwindow
             ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/gtk_controller/view/insertdialog
             ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/gtk_controller/view/editdialog
+            ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/webserver_controller
+            ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/webserver_controller/webserver
             ${CMAKE_CURRENT_LIST_DIR}/src/config
         )
 
-        target_link_libraries(cadastro ${GTK_LIBRARIES} sqlite3 ini)
+        target_link_libraries(cadastro ${GTK_LIBRARIES} sqlite3 ini civetweb pthread dl)
         add_definitions( ${GTK_CFLAGS} ${GTK_CFLAGS_OTHER})
     endif ()
 endif ()
@@ -68,4 +72,8 @@ add_custom_command(TARGET cadastro POST_BUILD
 
 add_custom_command(TARGET cadastro POST_BUILD 
                     COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_SOURCE_DIR}/config 
-                    ${CMAKE_BINARY_DIR}/bin/config) 
+                    ${CMAKE_BINARY_DIR}/bin/config)
+
+add_custom_command(TARGET cadastro POST_BUILD 
+                    COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_SOURCE_DIR}/assets 
+                    ${CMAKE_BINARY_DIR}/bin/assets) 
