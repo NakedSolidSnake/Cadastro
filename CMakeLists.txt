@@ -61,7 +61,7 @@ if (PKG_CONFIG_FOUND)
             ${CMAKE_CURRENT_LIST_DIR}/src/config
         )
 
-        target_link_libraries(cadastro ${GTK_LIBRARIES} sqlite3 ini civetweb pthread dl)
+        target_link_libraries(cadastro ${GTK_LIBRARIES} sqlite3 ini civetweb pthread dl cJSON)
         add_definitions( ${GTK_CFLAGS} ${GTK_CFLAGS_OTHER})
     endif ()
 endif ()
