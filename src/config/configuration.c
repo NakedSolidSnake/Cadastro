@@ -42,6 +42,10 @@ static int handler (void* user, const char* section, const char* name, const cha
     else if (MATCH(CONFIGURATION_SECTOR_CONTROLLER, CONFIGURATION_SECTOR_VALUE_TYPE))
     {
         strncpy (config->controller_type, value, CONFIGURATION_CONTROLLER_MAX_LEN);
+    }
+    else if (MATCH(CONFIGURATION_SECTOR_WEBSERVER, CONFIGURATION_SECTOR_VALUE_PORT))
+    {
+        strncpy (config->webserver.port, value, CONFIGURATION_WEBSERVER_MAX_LEN);
     } 
     else
     {
