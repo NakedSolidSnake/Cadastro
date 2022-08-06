@@ -2,58 +2,125 @@
 #include <string.h>
 #include <stdlib.h>
 
-int handler_index (struct mg_connection *conn, void *data)
+int handler_requests (struct mg_connection *conn, void *data)
 {
-    char path [1024] = {0};
-
     const struct mg_request_info *ri = mg_get_request_info (conn);
 
-    const char *root = mg_get_option (mg_get_context (conn), "document_root");
-
-    strncpy (path, root, sizeof (path));
-
-    if (strcmp (ri->local_uri, "/") == 0)
+    static handler_requests_map_t map = 
     {
-        strncat (path, "/index.html", sizeof (path) - strlen (root));
-    }
-    else 
+        .requests = 
+        {
+            {.method = HANDLER_REQUEST_GET, .handler = handler_get}
+        },
+        .amount = 1
+    };
+
+    for (unsigned char i = 0; i < map.amount; i++)
     {
-        strncat (path, ri->local_uri, sizeof (path) - strlen (root));
+        handler_request_map_t *rm = &map.requests[i];
+
+        if (strcmp (ri->request_method, rm->method) == 0)
+            return rm->handler (conn, data);
     }
 
-    mg_send_file (conn, path);
-
-    return 200;
+    mg_send_http_error (conn, 405, "Only, GET, PUT, POST, DELETE are supported");
+    return 405;
 }
 
-int handler_version_request (struct mg_connection *conn, void *data)
-{
-   cJSON *obj = cJSON_CreateObject ();
 
-   if (!obj) 
-   {
-        mg_send_http_error (conn, 500, "Server Error");
-        return 500;
-   }
 
-   cJSON_AddStringToObject (obj, "version", CIVETWEB_VERSION);
-   send_json (conn, obj);
 
-   cJSON_Delete (obj);
 
-   return 200;
-}
-
-int send_json (struct mg_connection *conn, cJSON *json_obj)
+int send_json (struct mg_connection *conn, cJSON *json_obj, http_status_t status)
 {
     char *json_string = cJSON_PrintUnformatted (json_obj);
     size_t json_str_len = strlen (json_string);
+    char json_buffer [32] = {0};
+    snprintf (json_buffer, 32, "%lu", json_str_len);
 
-    mg_send_http_ok (conn, "application/json; charset=utf-8", json_str_len);
+    mg_response_header_start (conn, status);
+    mg_response_header_add (conn,
+                            "Content-Type",
+                            "application/json; charset=utf-8",
+                            -1);
+    mg_response_header_add (conn, "Content-Length", json_buffer, -1);
+
+    mg_response_header_send (conn);
 
     mg_write (conn, json_string, json_str_len);
 
     cJSON_free (json_string);
 
     return (int) json_str_len;
+}
+
+cJSON *serialize_person_list (person_t *list, unsigned int amount)
+{
+    cJSON *obj = cJSON_CreateObject ();
+    cJSON *array = NULL;
+
+    if (obj != NULL) 
+    {
+        array = cJSON_AddArrayToObject (obj, "persons");
+        if (array != NULL)
+        {
+            for (unsigned int i = 0; i < amount; i++)
+                serialize_person (array, &list[i]);
+        }
+    }
+
+    return obj;
+}
+
+cJSON *serialize_person (cJSON *obj, person_t *person)
+{
+    cJSON *person_json = NULL;
+    cJSON *name = NULL;
+    cJSON *address = NULL;
+    cJSON *age = NULL;
+    cJSON *id = NULL;
+
+    person_json = cJSON_CreateObject ();
+
+    if (person_json != NULL)
+    {
+        if (person->name != NULL && strlen (person->name) > 0)
+        {
+            name = cJSON_CreateString (person->name);
+            cJSON_AddItemToObject (person_json, "name", name);
+        }
+
+        if (person->address != NULL && strlen (person->address) > 0)
+        {
+            address = cJSON_CreateString (person->address);
+            cJSON_AddItemToObject (person_json, "address", address);
+        }
+
+        if (person->age >= 0)
+        {
+            age = cJSON_CreateNumber (person->age);
+            cJSON_AddItemToObject (person_json, "age", age);
+        }
+
+        id = cJSON_CreateNumber (person->id);
+        cJSON_AddItemToObject (person_json, "id", id);
+
+        if (obj != NULL)
+            cJSON_AddItemToArray (obj, person_json);
+    }
+
+    return person_json;
+}
+
+cJSON *serialize_error (const char *error, const char *hint)
+{
+    cJSON *json = cJSON_CreateObject ();
+
+    if (json != NULL)
+    {
+        cJSON_AddStringToObject (json, "error", error);
+        cJSON_AddStringToObject (json, "hint", hint);
+    }
+
+    return json;    
 }

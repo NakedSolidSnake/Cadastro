@@ -38,6 +38,9 @@ if (PKG_CONFIG_FOUND)
             ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/webserver_controller/person_controller_webserver.c
             ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/webserver_controller/webserver/webserver.c
             ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/webserver_controller/handlers/handlers.c
+            ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/webserver_controller/handlers/handler_get.c
+            ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/webserver_controller/handlers/handler_index.c
+            ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/webserver_controller/handlers/handler_version.c
             
             )
 
