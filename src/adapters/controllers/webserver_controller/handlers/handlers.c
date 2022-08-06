@@ -10,9 +10,10 @@ int handler_requests (struct mg_connection *conn, void *data)
     {
         .requests = 
         {
-            {.method = HANDLER_REQUEST_GET, .handler = handler_get}
+            {.method = HANDLER_REQUEST_GET,  .handler = handler_get},
+            {.method = HANDLER_REQUEST_POST, .handler = handler_post}
         },
-        .amount = 1
+        .amount = 2
     };
 
     for (unsigned char i = 0; i < map.amount; i++)
@@ -123,4 +124,38 @@ cJSON *serialize_error (const char *error, const char *hint)
     }
 
     return json;    
+}
+
+bool deserialize_person (const char *buffer, person_t *person)
+{
+    cJSON *name;
+    cJSON *address;
+    cJSON *age;
+    cJSON *json;
+    
+    person_t person_temp;
+    bool status = false;
+
+    cJSON *person_json = cJSON_Parse (buffer);
+    if (person_json != NULL)
+    {
+        json = cJSON_CreateObject ();
+        if (json != NULL)
+        {
+            name = cJSON_GetObjectItemCaseSensitive (person_json, "name");
+            address = cJSON_GetObjectItemCaseSensitive (person_json, "address");
+            age = cJSON_GetObjectItem (person_json, "age");
+
+            person_temp = person_create (name->valuestring, address->valuestring, (int)age->valuedouble);
+
+            memcpy (person, &person_temp, sizeof (person_t));
+
+            cJSON_Delete (json);
+            status = true;
+        }
+
+        cJSON_Delete (person_json);
+    }
+
+    return status;
 }

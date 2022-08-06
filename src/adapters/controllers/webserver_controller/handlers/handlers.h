@@ -91,13 +91,15 @@ typedef struct
 
 int handler_requests (struct mg_connection *conn, void *data);
 int handler_get (struct mg_connection *conn, void *data);
+int handler_post (struct mg_connection *conn, void *data);
 int handler_index (struct mg_connection *conn, void *data);
 int handler_version_request (struct mg_connection *conn, void *data);
 int send_json (struct mg_connection *conn, cJSON *json_obj, http_status_t status);
 
 cJSON *serialize_person_list (person_t *list, unsigned int amount);
 cJSON *serialize_person (cJSON *obj, person_t *person);
-
 cJSON *serialize_error (const char *error, const char *hint);
+
+bool deserialize_person (const char *buffer, person_t *person);
 
 #endif /* HANDLERS_H_ */
