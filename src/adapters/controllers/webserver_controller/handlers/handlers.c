@@ -13,8 +13,9 @@ int handler_requests (struct mg_connection *conn, void *data)
             {.method = HANDLER_REQUEST_GET,    .handler = handler_get},
             {.method = HANDLER_REQUEST_POST,   .handler = handler_post},
             {.method = HANDLER_REQUEST_DELETE, .handler = handler_delete},
+            {.method = HANDLER_REQUEST_PUT,    .handler = handler_put}
         },
-        .amount = 3
+        .amount = 4
     };
 
     for (unsigned char i = 0; i < map.amount; i++)

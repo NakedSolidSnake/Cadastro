@@ -93,6 +93,7 @@ int handler_requests (struct mg_connection *conn, void *data);
 int handler_get (struct mg_connection *conn, void *data);
 int handler_post (struct mg_connection *conn, void *data);
 int handler_delete (struct mg_connection *conn, void *data);
+int handler_put (struct mg_connection *conn, void *data);
 int handler_index (struct mg_connection *conn, void *data);
 int handler_version_request (struct mg_connection *conn, void *data);
 int send_json (struct mg_connection *conn, cJSON *json_obj, http_status_t status);

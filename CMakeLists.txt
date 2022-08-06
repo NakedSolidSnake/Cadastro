@@ -41,6 +41,7 @@ if (PKG_CONFIG_FOUND)
             ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/webserver_controller/handlers/handler_get.c
             ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/webserver_controller/handlers/handler_post.c
             ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/webserver_controller/handlers/handler_delete.c
+            ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/webserver_controller/handlers/handler_put.c
             ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/webserver_controller/handlers/handler_index.c
             ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/webserver_controller/handlers/handler_version.c
             
