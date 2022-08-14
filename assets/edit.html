@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="uft-8">    
+    <title>Add new registry</title>
+    <style>
+        body { 
+			text-align: center;            
+            background: linear-gradient(90deg, rgba(215,215,219,1) 0%, rgba(237,240,240,1) 54%, rgba(255,255,255,1) 87%);
+		} 
+
+        .page_title { 
+            font-size: 70px;             
+            background: -webkit-linear-gradient(#eee, #333);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 3px 3px;
+            transition-duration: 350ms;
+		} 
+
+        .page_title:hover{
+            transform: scale(1.1);
+            transition-duration: 350ms;
+            cursor: pointer;
+        } 
+
+        .add_sub_title{
+            font-size: 35px;             
+            background: -webkit-linear-gradient(#eee, #333);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transition-duration: 350ms;
+		} 
+
+       .label_text{
+            font-size: 25px;             
+            background: -webkit-linear-gradient(#eee, #333);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 1px 1px; 
+            margin-right: 15px;           
+        }
+
+        .text_input, .text_input_number{
+            border-radius: 5px;
+            height: 25px;
+        }
+
+        .text_input{
+            width: 250px;
+        }
+
+        .buttons{
+            margin-top: 10px;
+        }
+
+        button{
+            width: 120px;
+            height: 50px;
+            border-radius: 5px;
+            margin: 5px;
+            box-shadow: 1px 1px;
+            color: rgb(44, 45, 46);
+            text-shadow: 1px;
+            font-size: 30px;
+            font-weight: bold;            
+            background: linear-gradient(90deg, rgba(170,170,173,1) 0%, rgba(210,214,214,1) 54%, rgba(236,242,240,1) 87%);
+            cursor: pointer;
+            transition-duration: 350ms ;
+        }
+
+        button:hover{
+            color: rgb(250, 253, 255);
+            transform: scale(1.2);
+            transition-duration: 350ms ;
+            background: linear-gradient(90deg, rgba(33,33,33,1) 0%, rgba(59,60,60,1) 46%, rgba(117,116,116,1) 87%);
+        }
+    </style>
+    <script>
+
+        var id;
+
+        class Person {
+            name;
+            address;
+            age;
+        }
+
+        function getPersonFromStorage(person){
+            // Check browser support
+            if (typeof(Storage) !== "undefined") {
+            // Retrieve
+                person.id = localStorage.getItem("id");
+                person.name = localStorage.getItem("name");
+                person.address = localStorage.getItem("address");
+                person.age = localStorage.getItem("age");
+                id = person.id;
+                return person;
+            } else {
+                alert("Browser does not support Web Storage.");
+                return null;
+            }
+        }
+
+        function setPersonFill(person){
+            document.getElementById("fname").value = person.name;
+            document.getElementById("faddress").value = person.address;
+            document.getElementById("fage").value = person.age;
+        }
+
+        function getPersonFromScreen(person) {
+            person.name = document.getElementById("fname").value;
+            document.getElementById("fname").value = "";
+
+            person.address = document.getElementById("faddress").value;
+            document.getElementById("faddress").value = "";
+
+            person.age = parseFloat(document.getElementById("fage").value);
+            document.getElementById("fage").value = "";
+        }
+
+        function getStorageData(){
+            person = new Person();
+            getPersonFromStorage(person);
+            setPersonFill(person);
+        }
+
+        function getPersonJSON (object) {
+            object.id = parseInt( id);
+            return JSON.stringify(object);
+        }
+
+        function httpSendData() {
+
+            person = new Person();
+            getPersonFromScreen(person);            
+
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.onreadystatechange = function () {
+                if (xmlHttp.readyState == 4 && xmlHttp.status == 200){
+                    window.location.replace('/');
+                }
+            }
+
+            xmlHttp.open("PUT", "/persons?id=" + id, true); // true for asynchronous 
+            xmlHttp.setRequestHeader("Content-Type", "application/json");
+            xmlHttp.send(getPersonJSON (person));
+        }
+
+        function returnHome(){
+            window.location.replace('/');
+        }
+
+
+    </script>
+
+</head>
+
+<body onload="getStorageData()">
+
+    <h1 class="page_title" onclick="window.location.replace('/')">Registry Webserver</h1>
+    <h2 class="add_sub_title">Update registry</h2>
+    <div>
+        <div>
+            <label class="label_text" for="fname">Name:</label>
+            <input class="text_input" type="text" id="fname" name="fname" required placeholder="Enter a name">
+        
+            <label class="label_text" for="faddress">Address:</label>
+            <input class="text_input" type="text" id="faddress" name="faddress" required placeholder="Enter an address">
+        
+            <label class="label_text" for="fage">Age:</label>
+            <input class="text_input_number" type="number" id="fage" name="fage" min="0" max="100" required required placeholder="00">
+        </div>
+
+        <div class="buttons">
+            <button onclick="httpSendData()">Update</button>
+            <button onclick="returnHome()" >Cancel</button>
+            
+        </div>
+    </div>
+</body>
+<footer>
+
+</footer>
+
+</html>

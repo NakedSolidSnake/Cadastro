@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <link rel="stylesheet" type="text/css" href="home.css">
+    <script src="main.js"></script>
+
+    <title>Add new Registry</title>
+
+</head>
+
+<body>
+
+    <h1 class="page_title" onclick="window.location.replace('/')">Registry Webserver</h1>
+    <h2 class="add_sub_title">Add new registry</h2>
+
+    <div>
+        <div class="container">
+
+            <label class="label_text" for="fname">Name:</label>
+            <input class="text_input" type="text" id="fname" name="fname" required placeholder="Enter a name">
+
+            <label class="label_text" for="faddress">Address:</label>
+            <input class="text_input" type="text" id="faddress" name="faddress" required placeholder="Enter an address">
+
+            <label class="label_text" for="fage">Age:</label>
+            <input class="text_input_number" type="number" id="fage" name="fage" min="0" max="100" required required
+                required placeholder="00">
+
+        </div>
+
+        <div class="buttons">
+            <button onclick="httpSendData()">Save</button>
+            <button onclick="returnHome()">Cancel</button>
+
+        </div>
+    </div>
+</body>
+<footer>
+
+</footer>
+
+</html>

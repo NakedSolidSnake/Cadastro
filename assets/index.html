@@ -1,16 +1,294 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">    
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
-    <link rel="stylesheet" type="text/css" href="home.css">
-    <script src="script.js"></script>
-    
-    <title>Document</title>
-</head>
-<body>
-    <h1>Webserver hello</h1>
-</body>
+<html>
+    <head>
+        <style>
+        body { 
+			text-align: center; 
+            background: linear-gradient(90deg, rgba(215,215,219,1) 0%, rgba(237,240,240,1) 54%, rgba(255,255,255,1) 87%);
+		} 
+
+		.page_title { 
+            font-size: 70px;             
+            background: -webkit-linear-gradient(#eee, #333);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 3px 3px;
+            transition-duration: 350ms;
+		} 
+
+        .page_title:hover{
+            transform: scale(1.1);
+            transition-duration: 350ms;
+            cursor: pointer;
+        }
+
+		/* Basic CSS to design table */ 
+		table { 
+			border-collapse: collapse; 
+			width: 100%; 
+		} 
+
+		th{
+            font-size: 25px;
+            padding: 8px; 
+			text-align: center; 
+			border-bottom: 1px solid rgb(56, 55, 55); 
+        } 
+		td { 
+            font-size: 18px;
+			padding: 8px; 
+			text-align: center; 
+			border-bottom: 1px solid  rgb(56, 55, 55); 
+		} 
+
+		/* CSS command for the row to highlight */ 
+		.highlight { 
+			background-color: #3a3a3a; 
+            color: white;
+            transition-duration: 200ms;
+		} 
+
+        .buttons{
+            margin-top: 10px;
+        }
+
+        button{
+            width: 120px;
+            height: 50px;
+            border-radius: 5px;
+            margin: 5px;
+            box-shadow: 1px 1px;
+            color: rgb(44, 45, 46);
+            text-shadow: 1px;
+            font-size: 30px;
+            font-weight: bold;            
+            background: linear-gradient(90deg, rgba(170,170,173,1) 0%, rgba(210,214,214,1) 54%, rgba(236,242,240,1) 87%);
+            cursor: pointer;
+            transition-duration: 350ms ;
+        }
+
+        button:hover{
+            color: rgb(250, 253, 255);
+            transform: scale(1.2);
+            transition-duration: 350ms ;
+            background: linear-gradient(90deg, rgba(33,33,33,1) 0%, rgba(59,60,60,1) 46%, rgba(117,116,116,1) 87%);
+        }
+        </style>        
+        <script>
+
+            class Person{
+                id;
+                name;
+                address;
+                age;
+            }
+
+            var id;
+            var row_selected;
+
+            function splitObject(objects){
+                var splitedObjects = objects.split(';')
+                return splitedObjects;
+            }
+
+            function createObject(value, object){
+                object.id = value['id'] ;
+                object.name = value['name'] ;
+                object.address = value['address'] ;
+                object.age = value['age'] ;
+
+                return true;
+            }
+
+            function addPerson(person) {
+                var table = document.getElementById("myTable");
+                var row = table.insertRow(1);
+                var idCell1 = row.insertCell(0);
+                var nameCell2 = row.insertCell(1);
+                var addressCell3 = row.insertCell(2)
+                var ageCell3 = row.insertCell(3)
+
+                idCell1.innerHTML = person.id;
+                nameCell2.innerHTML = person.name;
+                addressCell3.innerHTML = person.address;
+                ageCell3.innerHTML = person.age;
+
+            }
+
+            function getData(){
+                var xmlHttp = new XMLHttpRequest();
+                xmlHttp.onreadystatechange = function () {
+                if (xmlHttp.readyState == 4 && xmlHttp.status == 200){
+                    
+                    array = JSON.parse(xmlHttp.responseText, "persons");
+                    
+                    
+                    
+                    for (let i = 0; i < array.persons.length; i++){
+                        person = new Person();
+                        if(createObject(array.persons[i], person) === true){
+                            addPerson(person)
+                        }
+                    }
+
+                    addRowHandlers();
+
+                }
+            }
+                xmlHttp.open("GET", "/persons", true); // true for asynchronous 
+                xmlHttp.send(null);
+
+            }
+
+            function getSelectedRow(){
+
+                table = document.getElementById('myTable');
+                var columns=table.querySelectorAll('td');
+                for(var i=0;i<columns.length;i++)
+                    console.log('Column '+i+': '+columns[i].innerHTML );               
+            }
+
+            
+            
+            function addRowHandlers() {
+            var table = document.getElementById("myTable");
+            var rows = table.getElementsByTagName("tr");
+            for (i = 0; i < rows.length; i++) {
+                var currentRow = table.rows[i];
+                var createClickHandler = 
+                    function(row) 
+                    {
+                        return function() { 
+                                                var cell = row.getElementsByTagName("td")[0];
+                                                var id = cell.innerHTML;
+
+                                                row_selected = row; 
+
+                                                if (row.classList.contains('highlight')) {
+                                                    row.classList.remove('highlight'); 
+                                                    row_selected = null;
+                                                }
+                                                else{    
+                                                    clearSelection();                
+                                                    row.classList.add('highlight'); 
+                                                }
+                                            
+                                        };
+                    };
+
+                currentRow.onclick = createClickHandler(currentRow);
+            }
+        }
+
+
+            
+        </script>
+    </head>
+
+    <body onload="getData()">
+
+        <h1 class="page_title" onclick="window.location.replace('/')">Registry Webserver</h1>
+
+        <table id="myTable">
+            <thead>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Age</th>
+            </thead>         
+        </table>        
+
+        <script>            
+
+            function clearSelection(){
+                var table = document.getElementById('myTable');
+                var rows = table.querySelectorAll('tr');
+
+                for(var i = 0; i < rows.length; i++){
+                    rows[i].classList.remove('highlight'); 
+                }
+            }
+
+            function httpSendData(id) {                            
+
+                var xmlHttp = new XMLHttpRequest();
+                xmlHttp.onreadystatechange = function () {
+                    if (xmlHttp.readyState == 4 && xmlHttp.status == 200){
+                        window.location.replace('/');
+                    }
+                }
+
+                xmlHttp.open("DELETE", "/persons?id="+id, false); // true for asynchronous 
+                xmlHttp.setRequestHeader("Content-Type", "application/json");
+                xmlHttp.send(null);
+            }
+            
+            function getSelectedRow(){
+
+                if(row_selected != null){
+                    
+                }else{
+                    alert("Select a registry to delete");
+                    return;
+                }
+
+                id = row_selected.cells[0].innerHTML;
+                
+                return id;
+            }
+
+            function sendDelete(){
+                httpSendData(getSelectedRow());
+            }
+
+
+            function getSelectedRowPerson(){
+
+                if(row_selected != null){
+                    
+                }else{
+                    alert("Please select a registry to edit");
+                    return;
+                }
+
+                person = new Person();
+
+                person.id = row_selected.cells[0].innerHTML;
+                person.name = row_selected.cells[1].innerHTML;
+                person.address = row_selected.cells[2].innerHTML;
+                person.age = row_selected.cells[3].innerHTML;
+
+                return person;
+            }
+
+            function storePerson(person){
+                // Check browser support
+                if (typeof(Storage) !== "undefined") {
+                // Store
+                    localStorage.setItem("id", person.id);
+                    localStorage.setItem("name", person.name);
+                    localStorage.setItem("address", person.address);
+                    localStorage.setItem("age", person.age);
+                }
+            }
+
+            function sendEdit(){
+                person = getSelectedRowPerson();
+                storePerson(person)
+                window.location.replace('/edit.html');
+            }
+
+            function sendNew(){
+                window.location.replace('/new.html');
+            }
+
+        </script>
+        <div class="buttons">
+            <button onclick="sendNew()">New</button>
+            <button onclick="sendEdit()">Edit</button>
+            <button onclick="sendDelete()">Delete</button>
+        </div>
+        
+    </body>
+
 </html>
