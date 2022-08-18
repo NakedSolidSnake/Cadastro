@@ -1,3 +1,3 @@
 #!/bin/bash
 
-cd .. && docker-compose down
+cd .. && PORT=9099 docker-compose down

@@ -9,4 +9,5 @@ services:
             - /tmp/.X11-unix:/tmp/./X11-unix
         environment:
             - DISPLAY=${DISPLAY}
-        network_mode: host
+        ports:
+        -   "${PORT}:8080"
