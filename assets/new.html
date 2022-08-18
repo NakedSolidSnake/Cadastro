@@ -7,7 +7,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
     <link rel="stylesheet" type="text/css" href="home.css">
-    <script src="main.js"></script>
+    <!-- <script src="main.js"></script> -->
+    <script>
+        class Person {
+            id;
+            name;
+            address;
+            age;
+        }
+
+        function getPersonFromScreen(person) {
+            person.name = document.getElementById("fname").value;
+            document.getElementById("fname").value = "";
+
+            person.address = document.getElementById("faddress").value;
+            document.getElementById("faddress").value = "";
+
+            person.age = parseFloat(document.getElementById("fage").value);
+            document.getElementById("fage").value = "";
+        }
+
+        function getPersonJSON (object) {
+            alert (JSON.stringify(object));
+            return JSON.stringify(object);
+        }
+
+        function httpSendData() {
+
+            person = new Person();
+            getPersonFromScreen(person);            
+
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.onreadystatechange = function () {
+                if (xmlHttp.readyState == 4 && (xmlHttp.status == 202 || xmlHttp.status == 201)){
+                    window.location.replace('/');
+                }
+            }
+
+            xmlHttp.open("POST", "/persons", true); // true for asynchronous 
+            xmlHttp.setRequestHeader("Content-Type", "application/json");
+            xmlHttp.send(getPersonJSON (person));
+        }
+    </script>
 
     <title>Add new Registry</title>
 

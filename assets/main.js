@@ -17,6 +17,7 @@ function getPersonFromScreen(person) {
 }
 
 function getPersonJSON (object) {
+    alert (JSON.stringify(object));
     return JSON.stringify(object);
 }
 
@@ -27,7 +28,7 @@ function httpSendData() {
 
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function () {
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 202){
+        if (xmlHttp.readyState == 4 && (xmlHttp.status == 202 || xmlHttp.status == 201)){
             window.location.replace('/');
         }
     }
