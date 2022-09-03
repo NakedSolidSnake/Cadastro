@@ -3,18 +3,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <main_window.h>
-#include <curl/curl.h>
 #include <deserializer.h>
 #include <serializer.h>
+#include <curl/curl.h>
+#include <curl_request.h>
 
 #define PERSON_CLIENT_BUFFER_SEARCH 1024
-
-static size_t get_callback (char *dest, size_t size, size_t nmemb, void *data)
-{
-    person_list_t *list = (person_list_t *)data;
-    deserialize_person_list (list, dest);
-    return 0;
-}
 
 static void person_client_events_on_get(void *object);
 static void person_client_events_on_add(void *object, char *name, char *address, char *age);
@@ -53,6 +47,8 @@ bool person_client_gtk_open(person_client_gtk_t *client, person_client_args_t *a
 
     if (client != NULL && args != NULL)
     {
+        snprintf (client->url, PERSON_CLIENT_GTK_URL_SIZE, "%s:%s%s", args->host, args->port, args->endpoint);
+        
         main_window_args.argc = args->argc;
         main_window_args.argv = args->argv;
         main_window_args.con = &client->events;
@@ -92,29 +88,10 @@ bool person_client_gtk_close(person_client_gtk_t *client)
 static void person_client_events_on_get(void *object)
 {
     person_client_gtk_t *client = (person_client_gtk_t *)object;
-    CURL *curl;
-    CURLcode res;
     person_list_t person_list;
 
-    curl = curl_easy_init ();
-    if (curl != NULL)
-    {
-        curl_easy_setopt (curl, CURLOPT_URL, "http://localhost:8080/persons");
-        curl_easy_setopt (curl, CURLOPT_WRITEFUNCTION, get_callback);
-        curl_easy_setopt (curl, CURLOPT_WRITEDATA, &person_list);
-
-        res = curl_easy_perform (curl);
-
-        if (res != CURLE_OK) 
-        {
-            //log
-        }
-
-        curl_easy_cleanup (curl);
-    }
-
-    curl_global_cleanup ();
-
+    curl_request (client->url, &person_list, NULL, curl_request_method_get);
+    
     client->view->set_all_persons(client->view->object, person_list.array, array_list_get_size (person_list.array));
 
     array_list_destroy (person_list.array);
@@ -128,27 +105,8 @@ static void person_client_events_on_add(void *object, char *name, char *address,
 
     char *json_string = serialize_person (&person);
 
-    CURL *curl;
-    CURLcode res;
-
-    curl = curl_easy_init ();
-    if (curl != NULL)
-    {
-        curl_easy_setopt (curl, CURLOPT_URL, "http://localhost:8080/persons");
-        curl_easy_setopt (curl, CURLOPT_POSTFIELDS, json_string);
-        curl_easy_setopt (curl, CURLOPT_POSTFIELDSIZE, -1L);
-
-        res = curl_easy_perform (curl);
-
-        if (res != CURLE_OK) 
-        {
-            //log
-        }
-
-        curl_easy_cleanup (curl);
-    }
-
-    curl_global_cleanup ();
+    curl_request (client->url, NULL, json_string, curl_request_method_post);
+    
     free (json_string);
 }
 
@@ -161,57 +119,21 @@ static void person_client_events_on_update(void *object, int id, char *name, cha
 
     char *json_string = serialize_person (&person);
 
-    CURL *curl;
-    CURLcode res;
+    snprintf (url, 1024, "%s?id=%d", client->url, id);
 
-    curl = curl_easy_init ();
-    if (curl != NULL)
-    {
-        snprintf (url, 1024, "%s?id=%d", "http://localhost:8080/persons", id);
-        curl_easy_setopt (curl, CURLOPT_URL, url);
-        curl_easy_setopt (curl, CURLOPT_POSTFIELDS, json_string);
-        curl_easy_setopt (curl, CURLOPT_CUSTOMREQUEST, "PUT");
-
-        res = curl_easy_perform (curl);
-
-        if (res != CURLE_OK) 
-        {
-            //log
-        }
-
-        curl_easy_cleanup (curl);
-    }
-
-    curl_global_cleanup ();
+    curl_request (url, NULL, json_string, curl_request_method_put);
+    
     free (json_string);
 }
 
 static void person_client_events_on_delete(void *object, int id)
 {
-    (void)object;
+    person_client_gtk_t *client = (person_client_gtk_t *)object;
     char url [1024] = {0};
 
-    CURL *curl;
-    CURLcode res;
+    snprintf (url, 1024, "%s?id=%d", client->url, id);
 
-    curl = curl_easy_init ();
-    if (curl != NULL)
-    {
-        snprintf (url, 1024, "%s?id=%d", "http://localhost:8080/persons", id);
-        curl_easy_setopt (curl, CURLOPT_URL, url);
-        curl_easy_setopt (curl, CURLOPT_CUSTOMREQUEST, "DELETE");
-
-        res = curl_easy_perform (curl);
-
-        if (res != CURLE_OK) 
-        {
-            //log
-        }
-
-        curl_easy_cleanup (curl);
-    }
-
-    curl_global_cleanup ();
+    curl_request (url, NULL, NULL, curl_request_method_delete);
 }
 
 static void person_client_events_on_search(void *object, const char *name)

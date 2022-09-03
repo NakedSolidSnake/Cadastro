@@ -30,7 +30,8 @@ if (PKG_CONFIG_FOUND)
             ${CMAKE_CURRENT_LIST_DIR}/src/client/view/editdialog/edit_dialog.c
             ${CMAKE_CURRENT_LIST_DIR}/src/client/deserializer/deserializer.c
             ${CMAKE_CURRENT_LIST_DIR}/src/client/serializer/serializer.c
-            
+            ${CMAKE_CURRENT_LIST_DIR}/src/client/curl/curl_request.c
+            ${CMAKE_CURRENT_LIST_DIR}/src/config/configuration.c            
             )
 
         target_include_directories(client_gtk 
@@ -43,9 +44,11 @@ if (PKG_CONFIG_FOUND)
             ${CMAKE_CURRENT_LIST_DIR}/src/client/view/editdialog
             ${CMAKE_CURRENT_LIST_DIR}/src/client/deserializer
             ${CMAKE_CURRENT_LIST_DIR}/src/client/serializer
+            ${CMAKE_CURRENT_LIST_DIR}/src/client/curl
+            ${CMAKE_CURRENT_LIST_DIR}/src/config
         )
 
-        target_link_libraries(client_gtk ${GTK_LIBRARIES} curl cJSON structures_static)
+        target_link_libraries(client_gtk ${GTK_LIBRARIES} curl cJSON structures_static ini)
         add_definitions( ${GTK_CFLAGS} ${GTK_CFLAGS_OTHER})
     endif ()
 endif ()
@@ -53,3 +56,7 @@ endif ()
 add_custom_command(TARGET client_gtk POST_BUILD 
                     COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_SOURCE_DIR}/resources 
                     ${CMAKE_BINARY_DIR}/bin/resources)   
+
+add_custom_command(TARGET client_gtk POST_BUILD 
+                    COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_SOURCE_DIR}/config 
+                    ${CMAKE_BINARY_DIR}/bin/config)

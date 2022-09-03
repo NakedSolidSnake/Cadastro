@@ -1,9 +1,9 @@
 #include "deserializer.h"
-#include <cJSON.h>
 
+static unsigned int deserializer_list_get_size (cJSON *list);
 bool deserialize_person_list (person_list_t *person_list, const char *buffer)
 {
-    int count = 0;
+    unsigned int count = 0;
     bool status = false;
     cJSON *person = NULL;
     cJSON *persons = NULL;
@@ -12,27 +12,45 @@ bool deserialize_person_list (person_list_t *person_list, const char *buffer)
     if (json != NULL)
     {
         persons = cJSON_GetObjectItemCaseSensitive (json, "persons");
-        cJSON_ArrayForEach (person, persons)
-        {
-            count ++;
-        }
+        
+        count = deserializer_list_get_size (persons);
 
         person_list->array = array_list_create (count , sizeof (person_t));
+
         cJSON_ArrayForEach (person, persons)
         {
-            cJSON *id = cJSON_GetObjectItem (person, "id");
-            cJSON *name = cJSON_GetObjectItemCaseSensitive (person, "name");
-            cJSON *address = cJSON_GetObjectItemCaseSensitive (person, "address");
-            cJSON *age = cJSON_GetObjectItem (person, "age");
-
-            status = true;
-
-            person_t p = person_create_id (id->valueint, name->valuestring, address->valuestring, age->valueint);
+            person_t p = deserializer_person (person);
             array_list_insert (person_list->array, &p);
+            status = true;
         }
 
         cJSON_Delete (json);
     }
 
     return status;
+}
+
+person_t deserializer_person (cJSON *json)
+{
+    cJSON *id = cJSON_GetObjectItem (json, "id");
+    cJSON *name = cJSON_GetObjectItemCaseSensitive (json, "name");
+    cJSON *address = cJSON_GetObjectItemCaseSensitive (json, "address");
+    cJSON *age = cJSON_GetObjectItem (json, "age");
+
+    person_t person = person_create_id (id->valueint, name->valuestring, address->valuestring, age->valueint);
+
+    return person;
+}
+
+static unsigned int deserializer_list_get_size (cJSON *list)
+{
+    unsigned int amount = 0;
+    cJSON *item;
+
+    cJSON_ArrayForEach (item, list)
+    {
+        amount ++;
+    }
+
+    return amount;
 }

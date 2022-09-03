@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <person.h>
 #include <array_list.h>
+#include <cJSON.h>
 
 typedef struct 
 {
@@ -11,5 +12,6 @@ typedef struct
 } person_list_t;
 
 bool deserialize_person_list (person_list_t *person_list, const char *buffer);
+person_t deserializer_person (cJSON *json);
 
 #endif /* DESERIALIZER_H_ */
