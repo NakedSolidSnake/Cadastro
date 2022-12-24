@@ -47,6 +47,8 @@ int send_json (struct mg_connection *conn, cJSON *json_obj, http_status_t status
                             "application/json; charset=utf-8",
                             -1);
     mg_response_header_add (conn, "Content-Length", json_buffer, -1);
+    mg_response_header_add (conn, "Access-Control-Allow-Origin", "*", -1);
+    
 
     mg_response_header_send (conn);
 
